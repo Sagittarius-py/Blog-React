@@ -85,14 +85,15 @@ app.listen(PORT, () => {
 // Route for creating the user
 app.post("/api/createUser", (req, res) => {
   const username = req.body.username;
+  const password = req.body.password;
   const access_lvl = req.body.access_lvl;
   const about = req.body.about;
 
-  console.log(username, access_lvl, about);
+  console.log(username, password, access_lvl, about);
 
   db.query(
-    "INSERT INTO users (userName, access_lvl, about) VALUES (?,?,?)",
-    [username, access_lvl, about],
+    "INSERT INTO users (userName, password, access_lvl, about) VALUES (?,?,?,?)",
+    [username, password, access_lvl, about],
     (err, result) => {
       if (err) {
         console.log(err);
@@ -101,3 +102,14 @@ app.post("/api/createUser", (req, res) => {
     }
   );
 });
+
+// Route to get all posts
+app.get("/api/getUsersNames", (req, res) => {
+    db.query("SELECT userName FROM users", (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    });
+  });
+  
