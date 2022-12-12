@@ -5,6 +5,7 @@ import CreatePost from "./pages/CreatePost";
 import CreateUser from "./pages/CreateUser";
 import MainPage from "./pages/MainPage";
 import Post from "./pages/Post";
+import Background from "./pages/background";
 
 const App = () => {
   return (
@@ -23,6 +24,8 @@ const App = () => {
         <Route path="/createuser" render={(props) => <CreateUser />} />
         <Route path="/post/:postId" render={(props) => <Post />} />
       </Router>
+
+      <Background />
     </div>
   );
 };

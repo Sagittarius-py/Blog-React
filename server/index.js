@@ -8,7 +8,18 @@ const PORT = 3002;
 app.use(cors());
 app.use(express.json());
 
-// Route to get all posts
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    callBack(null, "pictures");
+  },
+  filename: (req, file, callBack) => {
+    callBack(null, `${file.originalname}`);
+  },
+});
+let upload = multer({ dest: "pictures/" });
+
+//* Working wersion
 app.get("/api/get", (req, res) => {
   db.query("SELECT * FROM posts", (err, result) => {
     if (err) {
@@ -17,6 +28,19 @@ app.get("/api/get", (req, res) => {
     res.send(result);
   });
 });
+
+// !do zrobienia
+// app.get("/api/get", (req, res) => {
+//   db.query(
+//     "SELECT * FROM posts FULL OUTER JOIN photos ON posts.id = photos.post_id",
+//     (err, result) => {
+//       if (err) {
+//         console.log(err);
+//       }
+//       res.send(result);
+//     }
+//   );
+// });
 
 // Route to get one post
 app.get("/api/getFromId/:id", (req, res) => {
@@ -30,12 +54,13 @@ app.get("/api/getFromId/:id", (req, res) => {
 });
 
 // Route for creating the post
-app.post("/api/create", (req, res) => {
+app.post("/api/create", upload.single("file"), (req, res, next) => {
   const username = req.body.userName;
   const title = req.body.title;
   const text = req.body.text;
+  const file = req.file;
 
-  console.log(req, title, text);
+  console.log(file.filename);
 
   db.query(
     "INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)",
@@ -44,9 +69,33 @@ app.post("/api/create", (req, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
+      console.log(result.insertId);
+      insertImage(result);
     }
   );
+
+  // db.query("SELECT id FROM posts WHERE id = ?", id, (err, result) => {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   res.send(result);
+  // })
+
+  function insertImage(result) {
+    let directory = "./pictures/" + file.filename;
+    let postId = result.insertId;
+    db.query(
+      "INSERT INTO photos (photoName, photoDir, post_id) VALUES (?,?,?)",
+      [file.filename, directory, postId],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  }
+
+  res.send(file);
 });
 
 // Route for like
@@ -105,11 +154,12 @@ app.post("/api/createUser", (req, res) => {
 
 // Route to get all posts
 app.get("/api/getUsersNames", (req, res) => {
-    db.query("SELECT userName FROM users", (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      res.send(result);
-    });
+  db.query("SELECT userName FROM users", (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
   });
-  
+});
+
+// Files -----------------------------

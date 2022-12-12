@@ -12,7 +12,7 @@ body{
 .navbar{
   width:100%;
   height:80px;
-  background-color: coral;
+  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,13 +20,13 @@ body{
 
 .navbar .links{
 font-size: 25px;
-color: white;
+color: #30b8de;
 
 }
 .links a{
 margin: 10px;
 text-decoration: none;
-color: white;
+color: #30b8de;
 }
 
 .links a:hover{
@@ -41,10 +41,15 @@ color: white;
   align-items: center;
   height: 500px;
   width: 500px;
-  border: 2px solid coral;
+  border: 2px solid #30b8de;
+  background: rgba( 255, 255, 255, 0.75 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 4px );
+-webkit-backdrop-filter: blur( 4px );
 }
 
-.CreatePost {
+.CreatePost, .CreateUser {
+  margin-top: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,13 +86,11 @@ button{
   width: 60%;
   max-width: 50%;
   padding:30px;
-  margin-top: 50px;
+  margin: 50px 0 50px 0;
   display: flex;
   justify-content: center;
   flex-direction: column;
-  background-color: lightblue;
-  box-shadow: 2px 1px 8px black;
-  border:1px solid lightslategrey
+
 }
 
 .Post{
@@ -97,8 +100,12 @@ button{
  flex-direction: column;
  justify-content: flex-start;
  padding-left: 10px;
- border:1px solid lightslategrey;
-}
+ background: rgba( 255, 255, 255, 0.75 );
+ box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+ backdrop-filter: blur( 4px );
+ -webkit-backdrop-filter: blur( 4px );
+ border-radius: 10px;
+ border: 1px solid rgba( 255, 255, 255, 0.18 );}
 
 
 
@@ -119,5 +126,6 @@ button{
   float: left;
   margin-bottom: 10px;
 }
+
 
 
