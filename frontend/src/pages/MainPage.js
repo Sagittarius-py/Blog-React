@@ -26,6 +26,14 @@ function MainPage() {
     refreshPage();
   };
 
+  var photo = () => {
+    Axios.get(`http://localhost:3002/api/getPhoto`).then((response) => {
+      console.log(response);
+    });
+  };
+
+  photo();
+
   return (
     <div className="MainPage">
       <div className="PostContainer">
@@ -38,6 +46,11 @@ function MainPage() {
               >
                 {val.title}
               </h1>
+              <img
+                src={`http://localhost:3002/images/${val.photoName}`}
+                alt={val.photoName}
+              ></img>
+              <h5>{val.photoName + ".png"}</h5>
               <p>
                 {val.post_text.length > 300
                   ? val.post_text.substring(0, 300) + " ..."

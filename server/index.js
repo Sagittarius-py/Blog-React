@@ -1,46 +1,48 @@
 const express = require("express");
 const db = require("./config/db");
 const cors = require("cors");
-
+const path = require("path");
+const multer = require("multer");
+const mysql = require("mysql");
+const bodyParser = require("body-parser");
 const app = express();
 
-const PORT = 3002;
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 3002;
 
-const multer = require("multer");
+app.use(cors());
+app.use(express.static("public"));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+db.connect(function (err) {
+  if (err) {
+    return console.error("error: " + err.message);
+  }
+  console.log("Connected to the MySQL server.");
+});
+
 const storage = multer.diskStorage({
   destination: (req, file, callBack) => {
-    callBack(null, "pictures");
+    callBack(null, "./public/images");
   },
   filename: (req, file, callBack) => {
-    callBack(null, `${file.originalname}`);
+    callBack(null, file.originalname);
   },
 });
-let upload = multer({ dest: "pictures/" });
+let upload = multer({ storage: storage });
 
-//* Working wersion
+// Get all posts and photos
 app.get("/api/get", (req, res) => {
-  db.query("SELECT * FROM posts", (err, result) => {
-    if (err) {
-      console.log(err);
+  db.query(
+    "SELECT * FROM posts INNER JOIN photos ON posts.id = photos.post_id",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
     }
-    res.send(result);
-  });
+  );
 });
-
-// !do zrobienia
-// app.get("/api/get", (req, res) => {
-//   db.query(
-//     "SELECT * FROM posts FULL OUTER JOIN photos ON posts.id = photos.post_id",
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       }
-//       res.send(result);
-//     }
-//   );
-// });
 
 // Route to get one post
 app.get("/api/getFromId/:id", (req, res) => {
@@ -53,49 +55,36 @@ app.get("/api/getFromId/:id", (req, res) => {
   });
 });
 
-// Route for creating the post
-app.post("/api/create", upload.single("file"), (req, res, next) => {
+//@type   POST
+//route for post data
+app.post("/api/create", upload.single("file"), (req, res) => {
   const username = req.body.userName;
   const title = req.body.title;
   const text = req.body.text;
   const file = req.file;
-
-  console.log(file.filename);
-
   db.query(
     "INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)",
     [title, text, username],
     (err, result) => {
-      if (err) {
-        console.log(err);
+      if (!req.file) {
+        console.log("No file upload");
+      } else {
+        console.log(req.file.filename);
+        var img_src = "http://127.0.0.1:3002/images/" + req.file.filename;
+        var insertData =
+          "INSERT INTO photos(photoName, post_id, photoFile)VALUES(?,?,?)";
+        db.query(
+          insertData,
+          [req.file.filename, result.insertId, img_src],
+          (err, result) => {
+            if (err) throw err;
+            console.log("file uploaded");
+          }
+        );
       }
-      console.log(result.insertId);
-      insertImage(result);
     }
+    // res.send(file);
   );
-
-  // db.query("SELECT id FROM posts WHERE id = ?", id, (err, result) => {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   res.send(result);
-  // })
-
-  function insertImage(result) {
-    let directory = "./pictures/" + file.filename;
-    let postId = result.insertId;
-    db.query(
-      "INSERT INTO photos (photoName, photoDir, post_id) VALUES (?,?,?)",
-      [file.filename, directory, postId],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        }
-      }
-    );
-  }
-
-  res.send(file);
 });
 
 // Route for like
@@ -162,4 +151,4 @@ app.get("/api/getUsersNames", (req, res) => {
   });
 });
 
-// Files -----------------------------
+// app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
