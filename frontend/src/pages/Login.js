@@ -29,46 +29,34 @@ export default function Login(props) {
   };
 
   return (
-    <div className="h-screen flex">
-      <div
-        className="hidden lg:flex w-full lg:w-1/2 login_img_section
-          justify-around items-center"
-      >
-        <div
-          className=" 
-                  bg-black 
-                  opacity-20 
-                  inset-0 
-                  z-0"
-        ></div>
-        <div className="w-full mx-auto px-20 flex-col items-center space-y-6">
-          <h1 className="text-white font-bold text-4xl font-sans">
-            Simple App
-          </h1>
-          <p className="text-white mt-1">The simplest app to use</p>
-          <div className="flex justify-center lg:justify-start mt-6">
+    <div className="flex h-screen">
+      <div className="items-center justify-around hidden w-full lg:flex lg:w-1/2 login_img_section">
+        <div className="inset-0 z-0 bg-black  opacity-20"></div>
+        <div className="flex-col items-center w-full px-20 mx-auto space-y-6">
+          <p className="mt-1 text-white">The simplest app to use</p>
+          <div className="flex justify-center mt-6 lg:justify-start">
             <a
               href="/register"
-              className="hover:bg-indigo-700 hover:text-white hover:-translate-y-1 transition-all duration-500 bg-white text-indigo-800 mt-4 px-4 py-2 rounded-2xl font-bold mb-2"
+              className="px-4 py-2 mt-4 mb-2 font-bold text-indigo-800 transition-all duration-500 bg-white hover:bg-indigo-700 hover:text-white hover:-translate-y-1 rounded-2xl"
             >
               Get Started
             </a>
           </div>
         </div>
       </div>
-      <div className="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
+      <div className="flex items-center justify-center w-full space-y-8 bg-white lg:w-1/2">
         <div className="w-full px-8 md:px-32 lg:px-24">
-          <form className="bg-white rounded-md shadow-2xl p-5">
-            <h1 className="text-gray-800 font-bold text-2xl mb-1">
+          <form className="p-5 bg-white rounded-md shadow-2xl">
+            <h1 className="mb-1 text-2xl font-bold text-gray-800">
               Hello Again!
             </h1>
-            <p className="text-sm font-normal text-gray-600 mb-8">
+            <p className="mb-8 text-sm font-normal text-gray-600">
               Nice to see You again!
             </p>
-            <div className="flex items-center border-2 mb-8 py-2 px-3 rounded-2xl">
+            <div className="flex items-center px-3 py-2 mb-8 border-2 rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
+                className="w-5 h-5 text-gray-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -82,7 +70,7 @@ export default function Login(props) {
               </svg>
               <input
                 id="username"
-                className=" pl-2 w-full outline-none border-none"
+                className="w-full pl-2 border-none outline-none "
                 type="text"
                 name="username"
                 placeholder="User Name"
@@ -91,10 +79,10 @@ export default function Login(props) {
                 }}
               />
             </div>
-            <div className="flex items-center border-2 mb-12 py-2 px-3 rounded-2xl ">
+            <div className="flex items-center px-3 py-2 mb-12 border-2 rounded-2xl ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
+                className="w-5 h-5 text-gray-400"
                 viewBox="0 0 20 20"
                 fill="currentColor"
               >
@@ -105,7 +93,7 @@ export default function Login(props) {
                 />
               </svg>
               <input
-                className="pl-2 w-full outline-none border-none"
+                className="w-full pl-2 border-none outline-none"
                 type="password"
                 name="password"
                 id="password"
@@ -117,7 +105,7 @@ export default function Login(props) {
             </div>
             <button
               type="submit"
-              className="block w-full bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+              className="block w-full py-2 mt-5 mb-2 font-semibold text-white transition-all duration-500 bg-indigo-600 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1"
               onClick={logIn}
             >
               Login
@@ -125,7 +113,7 @@ export default function Login(props) {
             <div className="flex justify-between mt-4">
               <a
                 href="/register"
-                class="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all"
+                className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all"
               >
                 Don't have an account yet?
               </a>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Axios from "axios";
-import "../App.css";
+import CommentForm from "./CommentForm";
+import Gallery from "react-photo-gallery";
 
 export default function Post() {
   let { postId } = useParams();
@@ -39,6 +40,16 @@ export default function Post() {
     });
   });
 
+  const photoList = [];
+  post.photoNames.map((photo) => {
+    photoList.push({
+      src: `http://localhost:3002/images/${photo}`,
+      width: 4,
+      height: 3,
+    });
+    return photoList;
+  });
+
   const deletePost = (id) => {
     Axios.delete(`http://localhost:3002/api/delete/${postId}`).then(
       (response) => {
@@ -48,21 +59,33 @@ export default function Post() {
   };
 
   return (
-    <div className="Post individual">
-      <h1 className="post-title">{post.title}</h1>
-      <p>{post.postText}</p>
-      <h4>{post.userName}</h4>
-      {post.photoNames.map((photo) => {
-        return (
-          <img
-            key={photo}
-            src={`http://localhost:3002/images/${photo}`}
-            alt={photo}
-          ></img>
-        );
-      })}
+    <div className="flex justify-center m-12 f h-4/5">
+      <div className="flex flex-col w-3/5 p-12 mt-12 rounded-md shadow-2xl h-fit flex-nowrap">
+        <div className="about">
+          <h1 className="mb-1 text-2xl font-bold text-gray-800 post-title">
+            {post.title}
+          </h1>
+          <p>{post.postText}</p>
+          <h4 className="m-2 text-sm font-normal text-gray-600">
+            {post.userName}
+          </h4>
+        </div>
+        <div className="photos">
+          <Gallery photos={photoList} />;
+        </div>
 
-      <button onClick={() => deletePost(post.id)}>X</button>
+        <CommentForm />
+
+        <button
+          className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
+          onClick={() => deletePost(post.id)}
+        >
+          <div className="absolute inset-0 w-3 bg-red-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+          <span className="relative text-black group-hover:text-white">
+            Delete Post
+          </span>
+        </button>
+      </div>
     </div>
   );
 }
