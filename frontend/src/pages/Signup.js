@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Axios from "axios";
 
+import Car1 from "../images/1.jpg";
+
 export default function Signup(props) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +13,7 @@ export default function Signup(props) {
   const submitUser = (event) => {
     event.preventDefault();
     Axios.get(`http://localhost:3002/api/getUsers/${userName}`).then((data) => {
-      if (data.data.length == 0) {
+      if (data.data.length === 0) {
         if (password === confPassword && password.length > 0) {
           if (accessLVL > 0) {
             Axios.post("http://localhost:3002/api/createUser", {
@@ -41,30 +43,9 @@ export default function Signup(props) {
     <div className="h-screen flex">
       <div
         className="hidden lg:flex w-full lg:w-1/2 login_img_section
-        justify-around items-center"
-      >
-        <div
-          className=" 
-                bg-black 
-                opacity-20 
-                inset-0 
-                z-0"
-        ></div>
-        <div className="w-full mx-auto px-20 flex-col items-center space-y-6">
-          <h1 className="text-white font-bold text-4xl font-sans">
-            Simple App
-          </h1>
-          <p className="text-white mt-1">The simplest app to use</p>
-          <div className="flex justify-center lg:justify-start mt-6">
-            <a
-              href="/register"
-              className="hover:bg-indigo-700 hover:text-white hover:-translate-y-1 transition-all duration-500 bg-white text-indigo-800 mt-4 px-4 py-2 rounded-2xl font-bold mb-2"
-            >
-              Get Started
-            </a>
-          </div>
-        </div>
-      </div>
+        justify-around items-center bg-center  bg-no-repeat bg-cover"
+        style={{ backgroundImage: `url(${Car1})` }}
+      ></div>
       <div className="flex w-full lg:w-1/2 justify-center items-center bg-white space-y-8">
         <div className="w-full px-8 md:px-32 lg:px-24">
           <form className="bg-white rounded-md shadow-2xl p-5">

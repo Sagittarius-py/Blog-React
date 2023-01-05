@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import "../App.css";
 import PostCard from "./PostCard";
-import SessionContext from "../context";
+
+import getCookieObject from "../getCookieObject";
 
 function MainPage() {
-  const { session, signIn } = useContext(SessionContext);
-  console.log(session);
   const [postList, setPostList] = useState([]);
+
+  console.log(getCookieObject());
+  // const username = Cookies.get("username");
 
   useEffect(() => {
     Axios.get("http://localhost:3002/api/get").then((data) => {

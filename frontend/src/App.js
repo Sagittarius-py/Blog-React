@@ -8,17 +8,28 @@ import Post from "./pages/Post";
 import NavBar from "./pages/NavBar";
 import Signup from "./pages/Signup";
 
+import { useCookies } from "react-cookie";
+
 import { SessionProvider } from "./context";
 
 const App = () => {
+  const [cookies, setCookie, removeCookie] = useCookies({
+    accessLvl: 0,
+    username: "",
+    loggedIn: false,
+  });
+
   return (
     <div>
       <SessionProvider>
-        <NavBar />
+        <NavBar removeCookie={removeCookie} />
         <Router>
           <Route path="/" exact render={(props) => <MainPage />} />
           <Route path="/createpost" render={(props) => <CreatePost />} />
-          <Route path="/login" render={(props) => <Login />} />
+          <Route
+            path="/login"
+            render={(props) => <Login setCookie={setCookie} />}
+          />
           <Route path="/register" render={(props) => <Signup />} />
           <Route path="/post/:postId" render={(props) => <Post />} />
         </Router>

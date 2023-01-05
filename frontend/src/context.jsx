@@ -11,7 +11,6 @@ export function SessionProvider({ children }) {
 
   const signIn = (username, accessLvl) => {
     setSession({ username: username, loggedIn: true, accessLvl: accessLvl });
-
   };
 
   return (

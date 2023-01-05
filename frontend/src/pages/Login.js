@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 
-import SessionContext from "../context";
+import Car1 from "../images/2.jpg";
 
 export default function Login(props) {
-  const { session, signIn } = useContext(SessionContext);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,8 +14,11 @@ export default function Login(props) {
         (data) => {
           if (data.data.length > 0) {
             if (data.data[0].password === password) {
-              console.log("zalogowano");
-              signIn(data.data[0].userName, data.data[0].access_lvl);
+              console.log(props);
+              // signIn(data.data[0].userName, data.data[0].access_lvl);
+              props.setCookie("username", data.data[0].userName);
+              props.setCookie("accessLvl", data.data[0].access_lvl);
+              props.setCookie("loggedIn", true);
             } else {
               console.log("Błędne hasło");
             }
@@ -30,20 +32,11 @@ export default function Login(props) {
 
   return (
     <div className="flex h-screen">
-      <div className="items-center justify-around hidden w-full lg:flex lg:w-1/2 login_img_section">
-        <div className="inset-0 z-0 bg-black  opacity-20"></div>
-        <div className="flex-col items-center w-full px-20 mx-auto space-y-6">
-          <p className="mt-1 text-white">The simplest app to use</p>
-          <div className="flex justify-center mt-6 lg:justify-start">
-            <a
-              href="/register"
-              className="px-4 py-2 mt-4 mb-2 font-bold text-indigo-800 transition-all duration-500 bg-white hover:bg-indigo-700 hover:text-white hover:-translate-y-1 rounded-2xl"
-            >
-              Get Started
-            </a>
-          </div>
-        </div>
-      </div>
+      <div
+        className="hidden lg:flex w-full lg:w-1/2 login_img_section
+        justify-around items-center bg-center  bg-no-repeat bg-cover"
+        style={{ backgroundImage: `url(${Car1})` }}
+      ></div>
       <div className="flex items-center justify-center w-full space-y-8 bg-white lg:w-1/2">
         <div className="w-full px-8 md:px-32 lg:px-24">
           <form className="p-5 bg-white rounded-md shadow-2xl">

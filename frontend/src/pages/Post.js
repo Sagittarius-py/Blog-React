@@ -71,7 +71,7 @@ export default function Post() {
           </h4>
         </div>
         <div className="photos">
-          <Gallery photos={photoList} />;
+          <Gallery photos={photoList} />
         </div>
 
         <CommentForm />

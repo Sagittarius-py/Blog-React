@@ -1,8 +1,14 @@
-import { useContext } from "react";
-import SessionContext from "../context";
+import getCookieObject from "../getCookieObject";
 
-export default function NavBar() {
-  const { session } = useContext(SessionContext);
+export default function NavBar(props) {
+  const object = getCookieObject();
+  console.log(object, "cokolwiek");
+
+  function logOut() {
+    props.removeCookie("username");
+    props.removeCookie("loggedIn");
+    props.removeCookie("accessLvl");
+  }
 
   return (
     <header className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white text-sm py-4 top-0 dark:bg-gray-800  fixed">
@@ -23,13 +29,20 @@ export default function NavBar() {
           >
             Create Post
           </a>
-          {session.loggedIn ? (
+          {object.loggedIn ? (
             <>
               <a
                 className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
                 href="/userProfile"
               >
                 My Profile
+              </a>
+              <a
+                className="font-medium text-orange-600 hover:text-orange-400 dark:text-orange-400 dark:hover:text-orange-500"
+                href="/"
+                onClick={() => logOut()}
+              >
+                Log out
               </a>
             </>
           ) : (
