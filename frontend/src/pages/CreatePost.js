@@ -6,14 +6,19 @@ function CreatePost() {
   const [userName, setUserName] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [photos, setPhotos] = useState("");
 
-  const submitPost = (event) => {
+  const submitPost = () => {
     const data = new FormData();
+
     data.append("userName", userName);
     data.append("title", title);
     data.append("text", text);
-    data.append("file", photo);
+    // data.append("files", photos);
+
+    for (let i = 0; i < photos.length; i++) {
+      data.append("files", photos[i]);
+    }
 
     Axios.post("http://localhost:3002/api/create", data);
 
@@ -54,7 +59,10 @@ function CreatePost() {
           name="img"
           accept="image/*"
           multiple
-          onChange={(e) => setPhoto(e.target.files[0])}
+          onChange={(e) => {
+            setPhotos(e.target.files);
+            console.log(e.target.files);
+          }}
         ></input>
         <button onClick={submitPost}>Submit Post</button>
       </div>

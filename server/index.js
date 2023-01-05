@@ -34,7 +34,7 @@ let upload = multer({ storage: storage });
 // Get all posts and photos
 app.get("/api/get", (req, res) => {
   db.query(
-    "SELECT * FROM posts INNER JOIN photos ON posts.id = photos.post_id",
+    "SELECT DISTINCT  * FROM posts LEFT JOIN photos ON posts.id = photos.post_id GROUP BY id;",
     (err, result) => {
       if (err) {
         console.log(err);
@@ -47,43 +47,56 @@ app.get("/api/get", (req, res) => {
 // Route to get one post
 app.get("/api/getFromId/:id", (req, res) => {
   const id = req.params.id;
-  db.query("SELECT * FROM posts WHERE id = ?", id, (err, result) => {
-    if (err) {
-      console.log(err);
+  db.query(
+    "SELECT * FROM posts INNER JOIN photos ON posts.id = photos.post_id WHERE id = ?",
+    id,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
     }
-    res.send(result);
-  });
+  );
 });
 
 //@type   POST
 //route for post data
-app.post("/api/create", upload.single("file"), (req, res) => {
+app.post("/api/create", upload.array("files"), (req, res) => {
   const username = req.body.userName;
   const title = req.body.title;
   const text = req.body.text;
-  const file = req.file;
   db.query(
     "INSERT INTO posts (title, post_text, user_name) VALUES (?,?,?)",
     [title, text, username],
     (err, result) => {
-      if (!req.file) {
+      if (!req.files) {
         console.log("No file upload");
-      } else {
-        console.log(req.file.filename);
-        var img_src = "http://127.0.0.1:3002/images/" + req.file.filename;
-        var insertData =
-          "INSERT INTO photos(photoName, post_id, photoFile)VALUES(?,?,?)";
+      } else if (req.files.length == 1) {
+        console.log(req.files[0].filename);
+        var img_src = "http://127.0.0.1:3002/images/" + req.files[0].filename;
         db.query(
-          insertData,
-          [req.file.filename, result.insertId, img_src],
+          "INSERT INTO photos(photoName, post_id, photoFile)VALUES(?,?,?)",
+          [req.files[0].filename, result.insertId, img_src],
           (err, result) => {
             if (err) throw err;
             console.log("file uploaded");
           }
         );
+      } else {
+        req.files.map((file) => {
+          console.log(file.filename);
+          var img_src = "http://127.0.0.1:3002/images/" + file.filename;
+          db.query(
+            "INSERT INTO photos(photoName, post_id, photoFile)VALUES(?,?,?)",
+            [file.filename, result.insertId, img_src],
+            (err, result) => {
+              if (err) throw err;
+              console.log("file uploaded");
+            }
+          );
+        });
       }
     }
-    // res.send(file);
   );
 });
 
@@ -142,13 +155,18 @@ app.post("/api/createUser", (req, res) => {
 });
 
 // Route to get all posts
-app.get("/api/getUsersNames", (req, res) => {
-  db.query("SELECT userName FROM users", (err, result) => {
-    if (err) {
-      console.log(err);
+app.get("/api/getUsers/:username", (req, res) => {
+  const username = req.params.username;
+  db.query(
+    "SELECT * FROM users WHERE userName = ?",
+    username,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
     }
-    res.send(result);
-  });
+  );
 });
 
 // app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
