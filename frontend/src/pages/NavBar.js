@@ -23,14 +23,15 @@ export default function NavBar(props) {
           <a className="font-medium text-blue-500" href="/" aria-current="page">
             Main Page
           </a>
-          <a
-            className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-            href="/createpost"
-          >
-            Create Post
-          </a>
+
           {cookies.loggedIn ? (
             <>
+              <a
+                className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
+                href="/createpost"
+              >
+                Create Post
+              </a>
               <a
                 className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
                 href={`/profile/${cookies.username}`}

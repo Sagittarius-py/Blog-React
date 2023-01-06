@@ -1,14 +1,15 @@
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
+import getCookieObject from "../getCookieObject";
+const cookies = getCookieObject();
 
-let refreshPage = () => {
-  window.location.reload(false);
-};
 const LikePost = (id) => {
-  Axios.post(`http://localhost:3002/api/like/${id}`).then((response) => {
-    alert("you liked a post");
-  });
-  refreshPage();
+  let username = { username: cookies.username };
+  Axios.post(`http://localhost:3002/api/like/${id}`, username).then(
+    (response) => {
+      console.log(response);
+    }
+  );
 };
 
 export default function PostCard(props) {
@@ -36,12 +37,14 @@ export default function PostCard(props) {
           <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-blue-600 rounded-full bg-blue-50">
             Likes: {props.postLikes}
           </span>
-          <span
-            className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-indigo-600 rounded-full cursor-pointer bg-indigo-50"
-            onClick={() => LikePost(props.id)}
-          >
-            Like this post!
-          </span>
+          {cookies.loggedIn ? (
+            <span
+              className="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold text-indigo-600 rounded-full cursor-pointer bg-indigo-50"
+              onClick={() => LikePost(props.id)}
+            >
+              Like this post!
+            </span>
+          ) : null}
         </div>
         <div className="flex gap-2 mt-4"></div>
       </div>

@@ -98,19 +98,43 @@ app.post("/api/create", upload.array("files"), (req, res) => {
       }
     }
   );
+
+  db.query(
+    "UPDATE users SET postCount = postCount + 1 WHERE userName = ?",
+    username,
+    (err, res) => {
+      console.log(err, res);
+      if (err) {
+        console.log(err);
+      }
+    }
+  );
 });
 
 // Route for like
 app.post("/api/like/:id", (req, res) => {
   const id = req.params.id;
+  const username = req.body.username;
+  console.log(id);
   db.query(
     "UPDATE posts SET likes = likes + 1 WHERE id = ?",
     id,
-    (err, result) => {
+    (err, res) => {
       if (err) {
         console.log(err);
       }
-      console.log(result);
+      console.log(res);
+    }
+  );
+
+  db.query(
+    "UPDATE users SET likesCount = likesCount + 1 WHERE userName = ?",
+    username,
+    (err, res) => {
+      console.log(err, res);
+      if (err) {
+        console.log(err);
+      }
     }
   );
 });
