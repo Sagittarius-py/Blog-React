@@ -3,8 +3,10 @@ import { useParams } from "react-router-dom";
 import Axios from "axios";
 import CommentForm from "./CommentForm";
 import Gallery from "react-photo-gallery";
+import getCookieObject from "../getCookieObject";
 
 export default function Post() {
+  const cookies = getCookieObject();
   let { postId } = useParams();
   const [post, setPost] = useState({
     title: "",
@@ -14,7 +16,8 @@ export default function Post() {
     id: "",
     rendered: 0,
   });
-  //   const [title, setTitle] = useState("");
+
+  console.log(post);
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/getFromId/${postId}`).then((data) => {
@@ -74,17 +77,29 @@ export default function Post() {
           <Gallery photos={photoList} />
         </div>
 
-        <CommentForm />
+        <CommentForm postId={postId} />
 
-        <button
-          className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
-          onClick={() => deletePost(post.id)}
-        >
-          <div className="absolute inset-0 w-3 bg-red-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
-          <span className="relative text-black group-hover:text-white">
-            Delete Post
-          </span>
-        </button>
+        {cookies.username == post.userName ? (
+          <button
+            className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
+            onClick={() => deletePost(post.id)}
+          >
+            <div className="absolute inset-0 w-3 bg-red-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+            <span className="relative text-black group-hover:text-white">
+              Delete Post
+            </span>
+          </button>
+        ) : cookies.accessLvl > 2 ? (
+          <button
+            className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
+            onClick={() => deletePost(post.id)}
+          >
+            <div className="absolute inset-0 w-3 bg-red-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
+            <span className="relative text-black group-hover:text-white">
+              Delete Post
+            </span>
+          </button>
+        ) : null}
       </div>
     </div>
   );

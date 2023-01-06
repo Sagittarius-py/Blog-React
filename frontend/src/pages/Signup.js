@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import Car1 from "../images/1.jpg";
 
@@ -9,6 +10,8 @@ export default function Signup(props) {
   const [confPassword, setConfPassword] = useState("");
   const [about, setAbout] = useState("");
   const [accessLVL, setAccess] = useState(0);
+
+  let history = useHistory();
 
   const submitUser = (event) => {
     event.preventDefault();
@@ -22,7 +25,7 @@ export default function Signup(props) {
               access_lvl: accessLVL,
               about: about,
             });
-            refreshPage();
+            history.push("/login");
           } else {
             console.log("You have to choose any access level");
           }
@@ -158,14 +161,6 @@ export default function Signup(props) {
             >
               Join
             </button>
-            <div className="flex justify-between mt-4">
-              <a
-                href="/register"
-                className="text-sm ml-2 hover:text-blue-500 cursor-pointer hover:-translate-y-1 duration-500 transition-all"
-              >
-                Don't have an account yet?
-              </a>
-            </div>
           </form>
         </div>
       </div>

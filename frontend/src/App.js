@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import CreatePost from "./pages/CreatePost";
@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage";
 import Post from "./pages/Post";
 import NavBar from "./pages/NavBar";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 
 import { useCookies } from "react-cookie";
 
@@ -32,6 +33,7 @@ const App = () => {
           />
           <Route path="/register" render={(props) => <Signup />} />
           <Route path="/post/:postId" render={(props) => <Post />} />
+          <Route path="/profile/:userName" render={(props) => <Profile />} />
         </Router>
       </SessionProvider>
     </div>

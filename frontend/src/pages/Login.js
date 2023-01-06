@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import Axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import Car1 from "../images/2.jpg";
 
 export default function Login(props) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  let history = useHistory();
 
   const logIn = (event) => {
     event.preventDefault();
@@ -19,6 +22,9 @@ export default function Login(props) {
               props.setCookie("username", data.data[0].userName);
               props.setCookie("accessLvl", data.data[0].access_lvl);
               props.setCookie("loggedIn", true);
+
+              history.push("/");
+              window.location.reload(false);
             } else {
               console.log("Błędne hasło");
             }

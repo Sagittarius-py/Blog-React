@@ -1,17 +1,17 @@
 import getCookieObject from "../getCookieObject";
 
 export default function NavBar(props) {
-  const object = getCookieObject();
-  console.log(object, "cokolwiek");
+  const cookies = getCookieObject();
 
   function logOut() {
     props.removeCookie("username");
     props.removeCookie("loggedIn");
     props.removeCookie("accessLvl");
+    window.location.reload(false);
   }
 
   return (
-    <header className="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-white text-sm py-4 top-0 dark:bg-gray-800  fixed">
+    <header className="fixed top-0 z-50 flex flex-wrap w-full py-4 text-sm bg-white sm:justify-start sm:flex-nowrap dark:bg-gray-800">
       <nav
         className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between"
         aria-label="Global"
@@ -29,11 +29,11 @@ export default function NavBar(props) {
           >
             Create Post
           </a>
-          {object.loggedIn ? (
+          {cookies.loggedIn ? (
             <>
               <a
                 className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-                href="/userProfile"
+                href={`/profile/${cookies.username}`}
               >
                 My Profile
               </a>
@@ -44,6 +44,14 @@ export default function NavBar(props) {
               >
                 Log out
               </a>
+              {cookies.accessLvl > 1 ? (
+                <a
+                  className="font-medium text-blue-600 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-500"
+                  href="/userProfile"
+                >
+                  Admin Panel
+                </a>
+              ) : null}
             </>
           ) : (
             <>

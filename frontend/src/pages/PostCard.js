@@ -14,16 +14,19 @@ const LikePost = (id) => {
 export default function PostCard(props) {
   let history = useHistory();
   return (
-    <div className="mx-auto my-2 overflow-hidden bg-white rounded-lg shadow h-fit">
+    <div className="mx-auto my-2 overflow-hidden bg-white rounded-lg drop-shadow-2xl h-fit">
       <img
         src={`http://localhost:3002/images/${props.imageLink}`}
-        className="aspect-video w-full object-cover cursor-pointer"
+        className="object-cover w-full cursor-pointer aspect-video"
         alt=""
         onClick={() => history.push(`/post/${props.id}`)}
       />
       <div className="p-4">
         <p className="mb-1 text-sm text-primary-500">
-          {props.postCreator} | <time>18 Nov 2022</time>
+          <a href={`http://localhost:3000/profile/${props.postCreator}`}>
+            {props.postCreator}
+          </a>{" "}
+          | <time>18 Nov 2022</time>
         </p>
         <h3 className="text-xl font-medium text-gray-900">{props.postTitle}</h3>
         <p className="mt-1 text-gray-500">

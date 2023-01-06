@@ -154,7 +154,6 @@ app.post("/api/createUser", (req, res) => {
   );
 });
 
-// Route to get all posts
 app.get("/api/getUsers/:username", (req, res) => {
   const username = req.params.username;
   db.query(
@@ -169,4 +168,44 @@ app.get("/api/getUsers/:username", (req, res) => {
   );
 });
 
+app.post("/api/writeComment/:id", (req, res) => {
+  const username = req.body.username;
+  const text = req.body.text;
+  const postId = req.params.id;
+
+  db.query(
+    "INSERT INTO comments (userName, commentText, commentPost) VALUES (?,?,?)",
+    [username, text, postId],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
+
+app.get("/api/getComments/:id", (req, res) => {
+  const postId = req.params.id;
+  db.query(
+    "SELECT * FROM comments WHERE commentPost = ?",
+    postId,
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
+
+app.delete("/api/deleteComment/:id", (req, res) => {
+  const id = req.params.id;
+
+  db.query("DELETE FROM comments WHERE IDcomment= ?", id, (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
 // app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
