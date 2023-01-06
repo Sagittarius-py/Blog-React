@@ -48,7 +48,7 @@ export default function NavBar(props) {
               {cookies.accessLvl > 1 ? (
                 <a
                   className="font-medium text-blue-600 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-500"
-                  href="/userProfile"
+                  href="/adminPanel"
                 >
                   Admin Panel
                 </a>

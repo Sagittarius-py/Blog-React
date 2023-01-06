@@ -8,6 +8,7 @@ import Post from "./pages/Post";
 import NavBar from "./pages/NavBar";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import AdminPanel from "./pages/AdminPanel";
 
 import { useCookies } from "react-cookie";
 
@@ -34,6 +35,11 @@ const App = () => {
           <Route path="/register" render={(props) => <Signup />} />
           <Route path="/post/:postId" render={(props) => <Post />} />
           <Route path="/profile/:userName" render={(props) => <Profile />} />
+          {cookies.accessLvl > 1 ? (
+            <Route path="/adminPanel" render={(props) => <AdminPanel />} />
+          ) : (
+            <Route path="/adminPanel" render={(props) => <MainPage />} />
+          )}
         </Router>
       </SessionProvider>
     </div>

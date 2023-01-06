@@ -18,7 +18,7 @@ function MainPage() {
   }, []);
 
   return (
-    <div className="MainPage">
+    <div className="MainPage py-20">
       <div className="PostContainer">
         {postList.map((val, key) => {
           return (

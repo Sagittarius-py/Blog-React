@@ -15,7 +15,7 @@ const LikePost = (id) => {
 export default function PostCard(props) {
   let history = useHistory();
   return (
-    <div className="mx-auto my-2 overflow-hidden bg-white rounded-lg drop-shadow-2xl h-fit">
+    <div className="mx-auto w-2/4 my-8 overflow-hidden bg-white rounded-lg drop-shadow-2xl h-fit">
       <img
         src={`http://localhost:3002/images/${props.imageLink}`}
         className="object-cover w-full cursor-pointer aspect-video"
