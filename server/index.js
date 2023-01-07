@@ -232,4 +232,91 @@ app.delete("/api/deleteComment/:id", (req, res) => {
     }
   });
 });
+
+app.post("/api/addCarBrand", (req, res) => {
+  const brand = req.body.carBrand;
+  console.log(brand);
+  db.query(
+    "INSERT INTO car_brand (brandName) VALUES (?)",
+    [brand],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
+
+app.post("/api/addCarModel", (req, res) => {
+  console.log(req);
+
+  db.query(
+    "INSERT INTO car_model (brand_id, modelName) VALUES (?,?)",
+    [req.body.brandId, req.body.carModel],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
+
+app.post("/api/addCarEngine", (req, res) => {
+  console.log(req);
+
+  db.query(
+    "INSERT INTO car_engine (pojemnosc, uklad, moc, momentObrotowy, nrSilnika) VALUES (?,?,?,?,?)",
+    [
+      req.body.pojemnosc,
+      req.body.uklad,
+      req.body.moc,
+      req.body.momentObrotowy,
+      req.body.nrSilnika,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
+
+app.get("/api/getCarBrands", (req, res) => {
+  db.query(
+    "SELECT DISTINCT  * FROM car_brand ORDER BY brandName ASC",
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
+
+// app.get("/api/getCarModels/:brandId", (req, res) => {
+//   const brandId = req.params.brandId;
+
+//   db.query(
+//     "SELECT * FROM car_model WHERE brand_id = ? ORDER BY brandName ASC",
+//     (err, result) => {
+//       if (err) {
+//         console.log(err);
+//       }
+//       res.send(result);
+//     }
+//   );
+// });
+
+// app.get("/api/getEngines/", (req, res) => {
+//   db.query("SELECT * FROM car_engine ORDER BY pojemnosc ASC", (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     }
+//     res.send(result);
+//   });
+// });
+
 // app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));

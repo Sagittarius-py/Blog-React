@@ -1,30 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import getCookieObject from "../getCookieObject";
+import Axios from "axios";
 
 export default function AdminPanel() {
+  const [carBrandList, setCarBrandList] = useState();
+
+  useEffect(() => {
+    Axios.get("http://localhost:3002/api/getCarBrands").then((data) => {
+      setCarBrandList(data.data);
+      console.log(carBrandList);
+    });
+  }, []);
+
   const [insertSelect, setInsertSelect] = useState(1);
   const cookies = getCookieObject();
 
   const [carBrand, setCarBrand] = useState("");
-  const [carModel, setCarModel] = useState("");
-  const [pojemnosc, setPojemnosc] = useState("");
-  const [uklad, setUklad] = useState("");
-  const [moc, setMoc] = useState("");
-  const [momentObrotowy, setMomentObrotowy] = useState("");
-  const [nrSilnika, setNrSilnika] = useState("");
 
-  const carBrandSubmit = () => {};
+  const [carModel, setCarModel] = useState({ carModel: "", brandId: 0 });
 
-  const carModelSubmit = () => {};
+  const [engine, setEngine] = useState({
+    pojemnosc: "",
+    uklad: "",
+    moc: 0,
+    momentObrotowy: 0,
+    nrSilnika: "",
+  });
+
+  const carBrandSubmit = () => {
+    const carbrand = { carBrand: carBrand };
+
+    Axios.post(`http://localhost:3002/api/addCarBrand`, carbrand).then(
+      (response) => {
+        console.log(response);
+      }
+    );
+  };
+
+  const carModelSubmit = () => {
+    console.log(carModel);
+
+    Axios.post(`http://localhost:3002/api/addCarModel`, carModel).then(
+      (response) => {
+        console.log(response);
+      }
+    );
+  };
 
   const EngineSubmit = () => {
-    const data = new FormData();
-
-    data.append("pojemnosc", pojemnosc);
-    data.append("uklad", uklad);
-    data.append("moc", moc);
-    data.append("momentObrotowy", momentObrotowy);
-    data.append("nrSilnika", nrSilnika);
+    Axios.post(`http://localhost:3002/api/addCarEngine`, engine).then(
+      (response) => {
+        console.log(response);
+      }
+    );
   };
 
   return (
@@ -74,7 +102,10 @@ export default function AdminPanel() {
                   id="carBrand"
                   placeholder="Audi, BMW..."
                 />
-                <button className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
+                <button
+                  onClick={() => carBrandSubmit()}
+                  className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+                >
                   Submit
                 </button>
               </div>
@@ -82,14 +113,42 @@ export default function AdminPanel() {
             {insertSelect == 2 ? (
               <div className="flex justify-center flex-col">
                 <input
-                  onChange={(e) => setCarModel(e.target.value)}
+                  onChange={(e) =>
+                    setCarModel((prevState) => ({
+                      ...prevState,
+                      carModel: e.target.value,
+                    }))
+                  }
                   className="mt-4 w-4/5 mx-auto rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="text"
                   name="carBrand"
                   id="carBrand"
                   placeholder="(Toyota) Yaris, (BMW) E36..."
                 />
-                <button className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2">
+                <div className="flex mt-4 w-4/5 mx-auto rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                  <select
+                    className="w-full"
+                    onChange={(e) =>
+                      setCarModel((prevState) => ({
+                        ...prevState,
+                        brandId: e.target.value,
+                      }))
+                    }
+                  >
+                    {carBrandList.map((carBrand, key) => {
+                      return (
+                        <option value={carBrand.brand_id} key={key}>
+                          {carBrand.brandName}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+
+                <button
+                  onClick={() => carModelSubmit()}
+                  className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+                >
                   Submit
                 </button>
               </div>
@@ -97,7 +156,12 @@ export default function AdminPanel() {
             {insertSelect == 3 ? (
               <div className="flex justify-center flex-row flex-wrap">
                 <input
-                  onChange={(e) => setPojemnosc(e.target.value)}
+                  onChange={(e) =>
+                    setEngine((prevState) => ({
+                      ...prevState,
+                      pojemnosc: e.target.value,
+                    }))
+                  }
                   className="mt-4 mr-4 w-2/5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="text"
                   name="capacity"
@@ -105,7 +169,12 @@ export default function AdminPanel() {
                   placeholder="Pojemność (2.5L)"
                 />
                 <input
-                  onChange={(e) => setUklad(e.target.value.toUpperCase())}
+                  onChange={(e) =>
+                    setEngine((prevState) => ({
+                      ...prevState,
+                      uklad: e.target.value,
+                    }))
+                  }
                   className="mt-4 mr-4 w-2/5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="text"
                   name="Uklad"
@@ -113,7 +182,12 @@ export default function AdminPanel() {
                   placeholder="Układ (V8...)"
                 />
                 <input
-                  onChange={(e) => setMoc(e.target.value)}
+                  onChange={(e) =>
+                    setEngine((prevState) => ({
+                      ...prevState,
+                      moc: e.target.value,
+                    }))
+                  }
                   className="mt-4 mr-4 w-2/5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="number"
                   name="moc"
@@ -121,7 +195,12 @@ export default function AdminPanel() {
                   placeholder="Moc (KM)"
                 />
                 <input
-                  onChange={(e) => setMomentObrotowy(e.target.value)}
+                  onChange={(e) =>
+                    setEngine((prevState) => ({
+                      ...prevState,
+                      momentObrotowy: e.target.value,
+                    }))
+                  }
                   className="mt-4 mr-4 w-2/5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="number"
                   name="momentObrotowy"
@@ -129,7 +208,12 @@ export default function AdminPanel() {
                   placeholder="Moment Obrotowy (NM)"
                 />
                 <input
-                  onChange={(e) => setNrSilnika(e.target.value)}
+                  onChange={(e) =>
+                    setEngine((prevState) => ({
+                      ...prevState,
+                      nrSilnika: e.target.value,
+                    }))
+                  }
                   className="mt-4 mr-4 w-2/5 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                   type="text"
                   name="nrSilnika"

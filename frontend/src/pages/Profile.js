@@ -6,6 +6,7 @@ import ProfilePh from "../images/Profile.png";
 import Popup from "./Popup";
 import getCookieObject from "../getCookieObject";
 
+
 export default function Profile() {
   let { userName } = useParams();
 
@@ -61,13 +62,14 @@ export default function Profile() {
           <h1 className="mx-auto uppercase text-5xl mt-8 mb-4">
             {user.username}
           </h1>
-          {cookies.loggedIn ? (
-            cookies.username == user.username ? (
-              <Popup>
-                <h1>Witam</h1>
-              </Popup>
-            ) : null
-          ) : null}
+          <div className="p-2 myCar flex rounded-lg -mt-8  absolute right-12 bg-slate-300 w-1/3 h-48">
+            <h1 className="absolute text-lg">That's My Car:</h1>
+            {cookies.loggedIn ? (
+              cookies.username == user.username ? (
+                <Popup />
+              ) : null
+            ) : null}
+          </div>
 
           <p className="mx-12 my-6">
             <p className="">Likes Count: {user.likesCount}</p>
