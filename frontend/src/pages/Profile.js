@@ -53,17 +53,25 @@ export default function Profile() {
         <p className="absolute z-10 px-2 py-1 m-4 bg-white rounded-lg opacity-90 drop-shadow-lg">
           ID: {user.userId}
         </p>
-        <div className="z-0 overflow-hidden group/item ">
+        <div
+          className={`z-0 overflow-hidden group/item ${
+            cookies.loggedIn ? "cursor-pointer " : null
+          }`}
+        >
           <img
             src={Placeholder}
             className={`relative object-cover w-full ${
-              cookies.loggedIn ? "group-hover/item:scale-110" : null
+              cookies.loggedIn
+                ? "group-hover/item:blur-sm group-hover/item:scale-110 "
+                : null
             } aspect-video h-96 `}
             alt=""
           />
-          <h1 className="absolute invisible mx-auto text-4xl group-hover/item:visible">
-            Edit
-          </h1>
+          {cookies.loggedIn ? (
+            <h1 className="absolute invisible px-4 py-2 mx-auto text-4xl transform -translate-x-1/2 -translate-y-48 bg-white rounded-md top-1/2 left-1/2 group-hover/item:visible">
+              Edit
+            </h1>
+          ) : null}
         </div>
 
         <img
