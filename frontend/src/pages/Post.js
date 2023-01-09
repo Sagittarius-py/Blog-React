@@ -4,8 +4,10 @@ import Axios from "axios";
 import CommentForm from "./CommentForm";
 import Gallery from "react-photo-gallery";
 import getCookieObject from "../getCookieObject";
+import { useHistory } from "react-router-dom";
 
 export default function Post() {
+  let history = useHistory();
   const cookies = getCookieObject();
   let { postId } = useParams();
   const [post, setPost] = useState({
@@ -92,7 +94,10 @@ export default function Post() {
         ) : cookies.accessLvl > 2 ? (
           <button
             className="relative bottom-0 right-0 float-right w-48 h-12 overflow-hidden text-lg bg-white rounded-lg shadow group"
-            onClick={() => deletePost(post.id)}
+            onClick={() => {
+              deletePost(post.id);
+              history.push("/");
+            }}
           >
             <div className="absolute inset-0 w-3 bg-red-600 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
             <span className="relative text-black group-hover:text-white">

@@ -296,27 +296,68 @@ app.get("/api/getCarBrands", (req, res) => {
   );
 });
 
-// app.get("/api/getCarModels/:brandId", (req, res) => {
-//   const brandId = req.params.brandId;
+app.get("/api/getCarModels/:brandId", (req, res) => {
+  const brandId = req.params.brandId;
 
-//   db.query(
-//     "SELECT * FROM car_model WHERE brand_id = ? ORDER BY brandName ASC",
-//     (err, result) => {
-//       if (err) {
-//         console.log(err);
-//       }
-//       res.send(result);
-//     }
-//   );
-// });
+  db.query(
+    "SELECT * FROM car_model WHERE brand_id = ? ORDER BY modelName ASC",
+    [brandId],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
 
-// app.get("/api/getEngines/", (req, res) => {
-//   db.query("SELECT * FROM car_engine ORDER BY pojemnosc ASC", (err, result) => {
-//     if (err) {
-//       console.log(err);
-//     }
-//     res.send(result);
-//   });
-// });
+app.get("/api/getEngines/", (req, res) => {
+  db.query("SELECT * FROM car_engine ORDER BY pojemnosc ASC", (err, result) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(result);
+  });
+});
+
+app.post("/api/addCarCombined", (req, res) => {
+  db.query(
+    "INSERT INTO car_combined (user_id, carBrand_id, carModel_id, carEngine_id, rocznik) VALUES (?,?,?,?,?)",
+    [
+      req.body.userId,
+      req.body.carBrand_id,
+      req.body.carModel_id,
+      req.body.carEngine_id,
+      req.body.rocznik,
+    ],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      console.log(result);
+    }
+  );
+});
+
+app.get("/api/getUserCar/:userId", (req, res) => {
+  const userId = req.params.userId;
+  db.query(
+    "SELECT car_combined.carCombined_id, car_combined.rocznik, users.id_user, car_brand.brandName, car_model.modelName, car_engine.pojemnosc, car_engine.moc, car_engine.uklad FROM car_combined INNER JOIN users ON car_combined.user_id = users.id_user INNER JOIN car_brand ON car_combined.carBrand_id  = car_brand.brand_id INNER JOIN car_model ON car_combined.carModel_id  = car_model.model_id INNER JOIN car_engine ON car_combined.carEngine_id  = car_engine.engine_id WHERE car_combined.user_id = ?;",
+    [userId],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      }
+      res.send(result);
+    }
+  );
+});
 
 // app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
+
+// SELECT car_combined.carCombined_id, car_combined.rocznik, users.id_user, car_brand.brandName, car_model.modelName, car_engine.pojemnosc, car_engine.moc, car_engine.uklad
+// FROM car_combined
+// INNER JOIN users ON car_combined.user_id = users.id_user
+// INNER JOIN car_brand ON car_combined.carBrand_id  = car_brand.brand_id
+// INNER JOIN car_model ON car_combined.carModel_id  = car_model.model_id
+// INNER JOIN car_engine ON car_combined.carEngine_id  = car_engine.engine_id;

@@ -35,6 +35,7 @@ export default function AdminPanel() {
         console.log(response);
       }
     );
+    window.location.reload(false);
   };
 
   const carModelSubmit = () => {
@@ -45,6 +46,7 @@ export default function AdminPanel() {
         console.log(response);
       }
     );
+    window.location.reload(false);
   };
 
   const EngineSubmit = () => {
@@ -53,35 +55,36 @@ export default function AdminPanel() {
         console.log(response);
       }
     );
+    window.location.reload(false);
   };
 
   return (
     <>
       <div
         style={{ height: "100vh", width: "100vw", overflow: "hidden" }}
-        className="main flex flex-row"
+        className="flex flex-row main"
       >
         <div
           //   style={{ height: "85vh" }}
-          className="container flex-col mt-24 h-4/5 m-12 w-96 rounded-2xl drop-shadow-2xl bg-slate-700"
+          className="container flex-col m-12 mt-24 h-4/5 w-96 rounded-2xl drop-shadow-2xl bg-slate-700"
         >
-          <h1 className="text-white m-4 text-3xl">Admin Panel</h1>
+          <h1 className="m-4 text-3xl text-white">Admin Panel</h1>
           {cookies.accessLvl > 2 ? (
             <a
               target="blank"
               href="http://localhost/phpmyadmin/index.php?route=/database/structure&db=blog_posts"
-              className="w-2/4 block uppercase mx-auto shadow bg-indigo-600 hover:bg-indigo-700 focus:shadow-outline focus:outline-none text-white text-xs py-3 px-10 rounded"
+              className="block w-2/4 px-10 py-3 mx-auto text-xs text-white uppercase bg-indigo-600 rounded shadow hover:bg-indigo-700 focus:shadow-outline focus:outline-none"
             >
               PhPMyAdmin
             </a>
           ) : null}
         </div>
 
-        <div className="grid p-12 px-24 mt-24 grid-padding-x-24 rounded-2xl m-12 bg-slate-400 w-4/5 h-4/5 grid-rows-2 grid-cols-3 gap-12">
-          <div className="bg-white p-2 m-auto w-full h-64 col-span-2 rounded-xl">
+        <div className="grid w-4/5 grid-cols-3 grid-rows-2 gap-12 p-12 px-24 m-12 mt-24 grid-padding-x-24 rounded-2xl bg-slate-400 h-4/5">
+          <div className="w-full h-64 col-span-2 p-2 m-auto bg-white rounded-xl">
             <label htmlFor="insert">Table to insert:</label>
             <select
-              className=" ml-1 rounded-sm "
+              className="ml-1 rounded-sm "
               name="insert"
               id="insert"
               onChange={(event) => {
@@ -93,7 +96,7 @@ export default function AdminPanel() {
               <option value={3}>Engine</option>
             </select>
             {insertSelect == 1 ? (
-              <div className="flex justify-center flex-col">
+              <div className="flex flex-col justify-center">
                 <input
                   onChange={(e) => setCarBrand(e.target.value)}
                   className="mt-4 w-4/5 mx-auto rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -104,14 +107,14 @@ export default function AdminPanel() {
                 />
                 <button
                   onClick={() => carBrandSubmit()}
-                  className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+                  className="block w-24 py-2 mt-5 mb-2 ml-8 font-semibold text-white transition-all duration-500 bg-indigo-600 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1"
                 >
                   Submit
                 </button>
               </div>
             ) : null}
             {insertSelect == 2 ? (
-              <div className="flex justify-center flex-col">
+              <div className="flex flex-col justify-center">
                 <input
                   onChange={(e) =>
                     setCarModel((prevState) => ({
@@ -147,14 +150,14 @@ export default function AdminPanel() {
 
                 <button
                   onClick={() => carModelSubmit()}
-                  className="block ml-8 w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+                  className="block w-24 py-2 mt-5 mb-2 ml-8 font-semibold text-white transition-all duration-500 bg-indigo-600 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1"
                 >
                   Submit
                 </button>
               </div>
             ) : null}
             {insertSelect == 3 ? (
-              <div className="flex justify-center flex-row flex-wrap">
+              <div className="flex flex-row flex-wrap justify-center">
                 <input
                   onChange={(e) =>
                     setEngine((prevState) => ({
@@ -166,7 +169,7 @@ export default function AdminPanel() {
                   type="text"
                   name="capacity"
                   id="capacity"
-                  placeholder="Pojemność (2.5L)"
+                  placeholder="Pojemność (2666 CC)"
                 />
                 <input
                   onChange={(e) =>
@@ -222,16 +225,16 @@ export default function AdminPanel() {
                 />
                 <button
                   onClick={() => EngineSubmit()}
-                  className="block w-24 bg-indigo-600 mt-5 py-2 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500 text-white font-semibold mb-2"
+                  className="block w-24 py-2 mt-5 mb-2 font-semibold text-white transition-all duration-500 bg-indigo-600 rounded-2xl hover:bg-indigo-700 hover:-translate-y-1"
                 >
                   Submit
                 </button>
               </div>
             ) : null}
           </div>
-          <div className="bg-white m-auto w-full h-64 rounded-xl">Panel 2</div>
-          <div className="bg-white m-auto w-full h-64 rounded-xl">Panel 3</div>
-          <div className="bg-white m-auto w-full h-64 col-span-2 rounded-xl">
+          <div className="w-full h-64 m-auto bg-white rounded-xl">Panel 2</div>
+          <div className="w-full h-64 m-auto bg-white rounded-xl">Panel 3</div>
+          <div className="w-full h-64 col-span-2 m-auto bg-white rounded-xl">
             Panel 4
           </div>
         </div>

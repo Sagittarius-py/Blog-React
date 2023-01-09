@@ -6,7 +6,6 @@ import ProfilePh from "../images/Profile.png";
 import Popup from "./Popup";
 import getCookieObject from "../getCookieObject";
 
-
 export default function Profile() {
   let { userName } = useParams();
 
@@ -21,6 +20,7 @@ export default function Profile() {
     about: "",
     rendered: 0,
   });
+  const [userCar, setUserCar] = useState();
 
   useEffect(() => {
     Axios.get(`http://localhost:3002/api/getUsers/${userName}`).then((data) => {
@@ -36,37 +36,62 @@ export default function Profile() {
             rendered: prevState.rendered + 1,
           };
         });
-
-        console.log(user);
       }
     });
+    if (user.rendered < 2) {
+      Axios.get(`http://localhost:3002/api/getUserCar/${user.userId}`).then(
+        (data) => {
+          setUserCar(data.data[0]);
+        }
+      );
+    }
   });
 
   return (
     <>
-      <div className="main h-fit w-3/4  mx-auto my-24 overflow-hidden bg-white rounded-lg drop-shadow-2xl ">
-        <p className="absolute m-4  bg-white rounded-lg px-2 py-1 opacity-90 drop-shadow-lg">
+      <div className="w-3/4 mx-auto my-24 overflow-hidden bg-white rounded-lg main h-fit drop-shadow-2xl ">
+        <p className="absolute z-10 px-2 py-1 m-4 bg-white rounded-lg opacity-90 drop-shadow-lg">
           ID: {user.userId}
         </p>
-        <img
-          src={Placeholder}
-          className="aspect-video h-96  w-full object-cover "
-          alt=""
-        />
+        <div className="z-0 overflow-hidden group/item ">
+          <img
+            src={Placeholder}
+            className={`relative object-cover w-full ${
+              cookies.loggedIn ? "group-hover/item:scale-110" : null
+            } aspect-video h-96 `}
+            alt=""
+          />
+          <h1 className="absolute invisible mx-auto text-4xl group-hover/item:visible">
+            Edit
+          </h1>
+        </div>
+
         <img
           src={ProfilePh}
-          className=" mx-auto h-48 w-48 object-cover -mt-24 rounded-full"
+          className="z-10 object-cover w-48 h-48 mx-auto -mt-24 rounded-full "
           alt=""
         />
-        <div className="content flex flex-col">
-          <h1 className="mx-auto uppercase text-5xl mt-8 mb-4">
+        <div className="flex flex-col content">
+          <h1 className="mx-auto mt-8 mb-4 text-5xl uppercase">
             {user.username}
           </h1>
-          <div className="p-2 myCar flex rounded-lg -mt-8  absolute right-12 bg-slate-300 w-1/3 h-48">
-            <h1 className="absolute text-lg">That's My Car:</h1>
+          <div className="absolute flex flex-col w-1/3 h-48 p-2 -mt-8 rounded-lg myCar right-12 bg-slate-300">
+            <h1 className="mx-8 text-lg ">That's My Car:</h1>
+            {userCar ? (
+              <>
+                <h2>
+                  {userCar.brandName} {userCar.modelName} - {userCar.rocznik} r.
+                </h2>
+                <h1 className="mx-8 mt-4 text-lg">With engine:</h1>
+                <h2>
+                  {userCar.uklad} | {userCar.pojemnosc} CC | {userCar.moc}KM
+                </h2>
+              </>
+            ) : null}
+
             {cookies.loggedIn ? (
               cookies.username == user.username ? (
-                <Popup />
+                <Popup userId={user.userId} />
               ) : null
             ) : null}
           </div>
